@@ -72,6 +72,19 @@ fn diff_windows_zip_for_each(x: &[f64]) -> Vec<f64> {
     dx
 }
 
+#[inline(never)]
+fn diff_windows_zip_for_each_macro(x: &[f64]) -> Vec<f64> {
+    let n = x.len();
+    let m = n - 1;
+    let mut dx: Vec<f64> = vec![0.0; m];
+
+    x.windows(2)
+        .zip(dx.iter_mut())
+        .for_each(|(w, dx_i)| *dx_i = w[1] - w[0]);
+
+    dx
+}
+
 pub fn main() {
     let mut args = std::env::args();
     let n: usize = match args.nth(1) {
@@ -90,17 +103,34 @@ pub fn main() {
 
     println!("{:#?}", version);
     if version == 0 {
-        println!("{:#?}", diff_unsafe_push(&x).into_iter().sum::<f64>());
+        for _ in 0..100 {
+            println!("{:#?}", diff_unsafe_push(&x).into_iter().sum::<f64>());
+        }
     } else if version == 1 {
-        println!("{:#?}", diff_unsafe(&x).into_iter().sum::<f64>());
+        for _ in 0..100 {
+            println!("{:#?}", diff_unsafe(&x).into_iter().sum::<f64>());
+        }
     } else if version == 2 {
-        println!("{:#?}", diff_windows(&x).into_iter().sum::<f64>());
+        for _ in 0..100 {
+            println!("{:#?}", diff_windows(&x).into_iter().sum::<f64>());
+        }
     } else if version == 3 {
-        println!("{:#?}", diff_windows_zip(&x).into_iter().sum::<f64>());
+        for _ in 0..100 {
+            println!("{:#?}", diff_windows_zip(&x).into_iter().sum::<f64>());
+        }
+    } else if version == 4 {
+        for _ in 0..100 {
+            println!(
+                "{:#?}",
+                diff_windows_zip_for_each(&x).into_iter().sum::<f64>()
+            );
+        }
     } else {
-        println!(
-            "{:#?}",
-            diff_windows_zip_for_each(&x).into_iter().sum::<f64>()
-        );
+        for _ in 0..100 {
+            println!(
+                "{:#?}",
+                diff_windows_zip_for_each_macro(&x).into_iter().sum::<f64>()
+            );
+        }
     }
 }
