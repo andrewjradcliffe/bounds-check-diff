@@ -85,6 +85,11 @@ fn diff_windows_zip_for_each_macro(x: &[f64]) -> Vec<f64> {
     dx
 }
 
+#[inline(never)]
+fn diff_windows_collect(x: &[f64]) -> Vec<f64> {
+    x.windows(2).map(|w| w[1] - w[0]).collect()
+}
+
 pub fn main() {
     let mut args = std::env::args();
     let n: usize = match args.nth(1) {
@@ -125,12 +130,16 @@ pub fn main() {
                 diff_windows_zip_for_each(&x).into_iter().sum::<f64>()
             );
         }
-    } else {
+    } else if version == 5 {
         for _ in 0..100 {
             println!(
                 "{:#?}",
                 diff_windows_zip_for_each_macro(&x).into_iter().sum::<f64>()
             );
+        }
+    } else {
+        for _ in 0..100 {
+            println!("{:#?}", diff_windows_collect(&x).into_iter().sum::<f64>());
         }
     }
 }
