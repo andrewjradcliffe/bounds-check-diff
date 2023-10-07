@@ -17,7 +17,7 @@ cargo asm --rust --native diff_windows_zip_for_each_macro
 cargo asm --rust --native diff_windows_collect
 
 # Then, comparison of native code
-rustup toolchain set nightly
+rustup override set nightly
 cargo build -Z profile-rustflags --profile=release-native
 hyperfine "./target/release-native/bounds-check-diff 1000000 4"
 hyperfine "./target/release-native/bounds-check-diff 1000000 5"
