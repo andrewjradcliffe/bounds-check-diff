@@ -30,3 +30,8 @@ hyperfine "./target/release/bounds-check-diff 1000000 6"
 
 cargo asm -Z profile-rustflags --rust --bin bounds-check-diff diff_windows_collect
 cargo asm -Z profile-rustflags --rust --native diff_windows_collect
+
+# Useful way to print target features
+rustc +nightly -Ctarget-cpu=native --print cfg | grep 'target_feature'
+rustc +nightly --print target-spec-json -Zunstable-options
+rustc --print target-features
